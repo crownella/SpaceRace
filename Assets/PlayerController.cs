@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
@@ -9,17 +10,23 @@ using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
+    public float delay;
 public float accel;
 public float decel;
 public float force;
+public float startingSpeed;
+public float maxSpeed;
 public KeyCode up;
 public KeyCode down;
 
-public Vector2 velocity;
+private Vector2 velocity;
+public float speed;
+
+private Vector2 baseVelocity;
 
 public Rigidbody2D rB;
 
-public GameObject Spawn;
+public GameObject spawn;
 public float inputLag;
 public bool input = true;
 public float inputCounter = 0;
@@ -29,36 +36,57 @@ public Text scoreText;
     void Start()
     {
         input = true;
+        speed = 0;
+        velocity = new Vector2(0,0);
+
     }
 
     
     void Update()
-    {
+    {   
         if (input)
         {
             if (Input.GetKey(up))
             {
-                transform.Translate(velocity * Time.deltaTime);
+                speed += accel;
             }
 
             if (Input.GetKey(down))
             {
-                transform.Translate(-velocity * Time.deltaTime);
+                speed -= decel;
             }
         }
         else
         {
-            print("input = false");
             inputCounter += 1;
             if (inputCounter > inputLag)
             {
                 input = true;
-                print("Input= true");
             }
         }
+        //print("Speed b4 force: " + speed);
+
+        if (speed < force )
+        {
+            speed = 0;
+        }
+        else 
+        {
+            if (speed > 0)
+            {
+                speed -= force;
+                if (speed > maxSpeed)
+                {
+                    speed = maxSpeed;
+                }
+            }
+        }
+        //print("Speed after force: " + speed);
 
 
         scoreText.text = score.ToString();
+        velocity = new Vector2(0,speed);
+        transform.Translate( velocity * Time.deltaTime);
 
     }
 
@@ -68,9 +96,18 @@ public Text scoreText;
         {
             score += 1;
         }
-        print("Collison");
+
         input = false;
         inputCounter = 0;
-        gameObject.transform.position = Spawn.gameObject.transform.position;
+        speed = 0;
+        gameObject.transform.position = spawn.gameObject.transform.position;
+    }
+
+    IEnumerator SpawnDelay()
+    {
+        input = false;
+        inputCounter = 0;
+        yield return new WaitForSeconds(delay);
+        gameObject.transform.position = spawn.gameObject.transform.position;
     }
 }
