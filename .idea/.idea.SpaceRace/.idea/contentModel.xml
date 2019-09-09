@@ -8,7 +8,9 @@
       <e p="Assets" t="Include">
         <e p="BullletController.cs" t="Include" />
         <e p="GameManager.cs" t="Include" />
+        <e p="PeopleManager.cs" t="Include" />
         <e p="PlayerController.cs" t="Include" />
+        <e p="SpeedTrail.cs" t="Include" />
       </e>
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />

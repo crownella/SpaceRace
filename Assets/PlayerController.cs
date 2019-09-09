@@ -10,7 +10,7 @@ using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
-    public float delay;
+public float delay;
 public float accel;
 public float decel;
 public float force;
@@ -30,11 +30,12 @@ public GameObject spawn;
 public float inputLag;
 public bool input = true;
 public float inputCounter = 0;
-public int score;
-public Text scoreText;
+
+private PeopleManager pM;
     
     void Start()
     {
+        pM = GetComponent<PeopleManager>();
         input = true;
         speed = 0;
         velocity = new Vector2(0,0);
@@ -46,9 +47,11 @@ public Text scoreText;
     {   
         if (input)
         {
+            GetComponent<SpriteRenderer>().color = Color.white;
             if (Input.GetKey(up))
             {
                 speed += accel;
+                pM.loading = false;
             }
 
             if (Input.GetKey(down))
@@ -58,6 +61,7 @@ public Text scoreText;
         }
         else
         {
+            GetComponent<SpriteRenderer>().color = Color.red;
             inputCounter += 1;
             if (inputCounter > inputLag)
             {
@@ -84,9 +88,9 @@ public Text scoreText;
         //print("Speed after force: " + speed);
 
 
-        scoreText.text = score.ToString();
-        velocity = new Vector2(0,speed);
-        transform.Translate( velocity * Time.deltaTime);
+        
+        velocity = new Vector2(0,speed); //turn speed into vector 2
+        transform.Translate( velocity * Time.deltaTime); //update pos
 
     }
 
@@ -94,16 +98,21 @@ public Text scoreText;
     {
         if (other.gameObject.tag == "FinishLine")
         {
-            score += 1;
+            pM.UpdateScore(true);
+        }
+        else
+        {
+            pM.UpdateScore(false);
         }
 
-        input = false;
+        input = false; //input lag
         inputCounter = 0;
-        speed = 0;
-        gameObject.transform.position = spawn.gameObject.transform.position;
+        speed = 0; //reset speed
+        gameObject.transform.position = spawn.gameObject.transform.position; //rest pos
+
     }
 
-    IEnumerator SpawnDelay()
+    IEnumerator SpawnDelay() //not working
     {
         input = false;
         inputCounter = 0;

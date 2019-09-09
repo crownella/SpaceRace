@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public float timerMax;
     public Slider slider;
 
+    public Text endtxt;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
         if (timer <= 0)
         {
             Time.timeScale = 0;
+            endtxt.text = "The End";
         }
 
         if (Input.GetKeyDown(KeyCode.R))
