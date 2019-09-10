@@ -49,7 +49,7 @@ public GameObject flaps;
         if (input)
         {
             GetComponent<SpriteRenderer>().color = Color.white;
-            if (Input.GetKey(up))
+            if (Input.GetKey(up) && !Input.GetKey(down))
             {
                 speed += accel;
                 pM.loading = false;
