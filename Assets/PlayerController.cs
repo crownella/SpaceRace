@@ -32,6 +32,7 @@ public bool input = true;
 public float inputCounter = 0;
 
 private PeopleManager pM;
+public GameObject flaps;
     
     void Start()
     {
@@ -57,7 +58,14 @@ private PeopleManager pM;
             if (Input.GetKey(down))
             {
                 speed -= decel;
+                flaps.SetActive(true);
             }
+            else
+            {
+                flaps.SetActive(false);
+            }
+            
+            
         }
         else
         {
